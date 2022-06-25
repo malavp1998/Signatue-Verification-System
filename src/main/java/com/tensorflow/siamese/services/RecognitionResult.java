@@ -22,4 +22,28 @@ public class RecognitionResult {
     List<Pair<User, Double>> userList;
 
     User bestMatch;
+
+    @Override
+    public String toString() {
+        return "RecognitionResult{" +
+                "userList=" + userList +
+                ", bestMatch=" + bestMatch +
+                '}';
+    }
+
+    public List<Pair<User, Double>> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<Pair<User, Double>> userList) {
+        this.userList = userList;
+    }
+
+    public User getBestMatch() {
+        return bestMatch;
+    }
+
+    public void setBestMatch(User bestMatch) {
+        this.bestMatch = bestMatch;
+    }
 }

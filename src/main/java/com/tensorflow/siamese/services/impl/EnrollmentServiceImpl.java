@@ -38,8 +38,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 .stream()
                 .map(image -> embeddingService.getEmbeddings(image))
                 .collect(Collectors.toList());
+        int i = 1;
+        for(List<Double> embeddings : embeddingsList)
+        {
+            System.out.println("Feature Vector of Signature Image"+ i +" = "+embeddings.toString());
+            i++;
+        }
         List<Double> embedding = matrixMean(embeddingsList);
-
+        System.out.println("Mean Feature Vector of "+name+" is = "+embedding.toString());
         User user = new User()
                 .name(name)
                 .numImages(images.size())

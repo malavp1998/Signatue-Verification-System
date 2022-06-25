@@ -34,12 +34,16 @@ public class EnrollmentController {
                              @RequestParam("files") List<MultipartFile> images) {
 
         try {
+            long start = System.currentTimeMillis();
             List<Path> imagePaths = new ArrayList<>();
             for (MultipartFile file : images) {
                 imagePaths.add(ImageProcessingService.write(file, path));
             }
             System.out.println(imagePaths +" "+name);
             User user = enrollmentService.enrollNew(imagePaths, name);
+            long end = System.currentTimeMillis();
+            System.out.println(".....................");
+            System.out.println("Time taken by service to enroll " + name +" is "+(end-start) + " Millis");
             return ResponseEntity.ok(user);
         } catch (Exception e) {
             log.debug("Exception in enrollNew Api", e);

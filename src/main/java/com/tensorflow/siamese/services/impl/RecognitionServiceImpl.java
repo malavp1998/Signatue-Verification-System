@@ -64,10 +64,20 @@ public class RecognitionServiceImpl implements RecognitionService {
         if (bestDistance <= maxDistanceThr) {
             if (userMatches.size() == 1 || userMatches.get(1).getValue() - bestDistance >= firstSecondMarginGap) {
                 bestMatch = userMatches.get(0).getKey();
+                bestMatch.setStatus("MATCHED");
             }
         }
+        else if(bestDistance <= 12) {
+            bestMatch = userMatches.get(0).getKey();
+            bestMatch.setStatus("FRAUD");
+        }
+        else
+        {
+            bestMatch = userMatches.get(0).getKey();
+            bestMatch.setStatus("No Match Found");
+        }
 
-        return new RecognitionResult(userMatches, bestMatch);
+        return new RecognitionResult(userMatches.subList(0,1), bestMatch);
     }
 
 

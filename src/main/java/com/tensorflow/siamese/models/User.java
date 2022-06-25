@@ -32,6 +32,17 @@ public class User {
     @Column(unique = true, columnDefinition = "VARCHAR(45)")
     private String name;
 
+
+    private String status = "";
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     private int numImages;
 
     @Column(columnDefinition = "TEXT")
@@ -40,6 +51,54 @@ public class User {
     @NonNull
     @CreatedDate
     private Instant created;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getNumImages() {
+        return numImages;
+    }
+
+    public void setNumImages(int numImages) {
+        this.numImages = numImages;
+    }
+
+    public String getEmbedding() {
+        return embedding;
+    }
+
+    public void setEmbedding(String embedding) {
+        this.embedding = embedding;
+    }
+
+    public Instant getCreated() {
+        return created;
+    }
+
+    public void setCreated(Instant created) {
+        this.created = created;
+    }
+
+    public Instant getModified() {
+        return modified;
+    }
+
+    public void setModified(Instant modified) {
+        this.modified = modified;
+    }
 
     @LastModifiedDate
     private Instant modified;

@@ -11,19 +11,24 @@ export class RecognizeContainer extends React.Component {
         this.state = {
             image: null,
             minConfidence: 7.0,
-            topTwoMinGap: 2.0,
+            topTwoMinGap: 0.1,
+            maxDistanceAllowedFraud: 2,
             isTableDisabled: true,
             result: null
         };
         this.onFormSubmit = this.onFormSubmit.bind(this);
         this.onImageChange = this.onImageChange.bind(this);
         this.onConfChange = this.onConfChange.bind(this);
+        this.onMaxDistanceAllowedFraudChange = this.onMaxDistanceAllowedFraudChange.bind(this);
         this.onGapChange = this.onGapChange.bind(this);
     }
 
     onConfChange(e) {
         this.setState({minConfidence: e.target.value});
     }
+    onMaxDistanceAllowedFraudChange(e) {
+            this.setState({maxDistanceAllowedFraud: e.target.value});
+        }
 
     onGapChange(e) {
         this.setState({topTwoMinGap: e.target.value});
@@ -49,6 +54,7 @@ export class RecognizeContainer extends React.Component {
         formData.append('image', this.state.image);
         formData.append('minConfidence', this.state.minConfidence);
         formData.append('topTwoMinGap', this.state.topTwoMinGap);
+        formData.append('maxDistanceAllowedFraud', this.state.maxDistanceAllowedFraud);
         const config = {
             headers: {
                 'content-type': 'multipart/form-data'
@@ -62,7 +68,7 @@ export class RecognizeContainer extends React.Component {
             }
         ).catch(
             error => {
-                toastr.error(`Recognition Failed`)
+                toastr.error(`Signature is Forged`)
             }
         )
     }
@@ -72,7 +78,7 @@ export class RecognizeContainer extends React.Component {
             <Segment>
                 <RecognizeForm onConfChange={this.onConfChange} onImageChange={this.onImageChange}
                                onFormSubmit={this.onFormSubmit} onGapChange={this.onGapChange}
-                               minConfidence={this.state.minConfidence} topTwoMinGap={this.state.topTwoMinGap}/>
+                               minConfidence={this.state.minConfidence} topTwoMinGap={this.state.topTwoMinGap} maxDistanceAllowedFraud={this.state.maxDistanceAllowedFraud} />
                 <RecognizeSummary {...this.state}/>
             </Segment>
         )
@@ -103,6 +109,9 @@ class RecognizeForm extends React.Component {
                         <Form.Input fluid type="text" label='Min Gap Between Top Two' color='#808080'
                                     value={this.props.topTwoMinGap}
                                     onChange={this.props.onGapChange}/>
+                        <Form.Input fluid type="text" label='Max Dis allowed Fraud' color='#808080'
+                                    value={this.props.maxDistanceAllowedFraud}
+                                    onChange={this.props.maxDistanceAllowedFraud}/>
                     </Form.Group>
                     {/*<Form.Checkbox label='I agree to the Terms and Conditions'/>*/}
                     <Button type='submit' onClick={this.props.onFormSubmit}> <Icon name='upload'/> Get Match</Button>
@@ -119,6 +128,7 @@ class RecognizeSummary extends React.Component {
 
         const {result} = this.props;
         let match, topName;
+
         if (result) {
             match = result.bestMatch;
             if (result.userList.length > 0) {
@@ -140,7 +150,7 @@ class RecognizeSummary extends React.Component {
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>Name</Table.HeaderCell>
-                            <Table.HeaderCell>Distance</Table.HeaderCell>
+                            <Table.HeaderCell>Status</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
 
@@ -149,8 +159,8 @@ class RecognizeSummary extends React.Component {
                             user => (
                                 <Table.Row key={user.key.name}
                                            style={match && topName === user.key.name ? greenStyle : redStyle}>
-                                    <Table.Cell>{user.key.name} </Table.Cell>
-                                    <Table.Cell> {user.value}</Table.Cell>
+                                    <Table.Cell>{(match.status === "No Match Found")?"":user.key.name} </Table.Cell>
+                                    <Table.Cell> {match.status}</Table.Cell>
                                 </Table.Row>
                             )
                         )}

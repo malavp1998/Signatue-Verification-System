@@ -21,7 +21,7 @@ public interface ImageProcessingService {
 
         OutputStream os = Files.newOutputStream(filepath);
         os.write(file.getBytes());
-        System.out.println(path + "  " + filepath);
+    //    System.out.println(path + "  " + filepath);
         return filepath;
     }
 
